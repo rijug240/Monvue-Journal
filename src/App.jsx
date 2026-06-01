@@ -158,79 +158,79 @@ const articles = [
 const categories = ["All", "Beauty & Style", "Lens Education", "Culture & Trends", "Monvue Stories"];
 
 function renderBlock(block, index) {
-  if (block.type === "heading") return <h2 key={index} className="mt-8 text-2xl md:text-3xl font-light tracking-[-0.04em] text-neutral-950">{block.text}</h2>;
-  if (block.type === "highlight") return <div key={index} className="rounded-3xl border border-pink-100 bg-pink-50 px-6 py-5 text-xl leading-snug tracking-[-0.03em] text-pink-600">{block.text}</div>;
-  if (block.type === "quote") return <blockquote key={index} className="border-l-4 border-pink-300 pl-5 text-2xl italic leading-snug tracking-[-0.03em] text-pink-500">{block.text}</blockquote>;
-  if (block.type === "link") return <a key={index} className="inline-flex w-fit rounded-full border border-pink-100 bg-pink-50 px-5 py-3 text-sm font-semibold text-pink-600" href={block.href} target="_blank" rel="noreferrer">{block.text}</a>;
-  return <p key={index} className="text-base md:text-lg leading-8 text-neutral-600">{block.text}</p>;
+  if (block.type === "heading") return <h2 key={index}>{block.text}</h2>;
+  if (block.type === "highlight") return <div key={index} className="highlight">{block.text}</div>;
+  if (block.type === "quote") return <blockquote key={index}>{block.text}</blockquote>;
+  if (block.type === "link") return <a key={index} className="story-link" href={block.href} target="_blank" rel="noreferrer">{block.text}</a>;
+  return <p key={index}>{block.text}</p>;
 }
 
-function ArticlePage({ article, onBack, liked, onLike, copied, copyLink, copyInstagram }) {
+function ArticlePage({ article, onBack, liked, onLike, copied, copyLink, copyInstagram, desktopBack }) {
   const shareText = `${article.title} — Monvue Journal`;
 
   return (
-    <article className="overflow-hidden rounded-[1.8rem] border border-neutral-200 bg-white shadow-sm">
-      <section className="grid lg:grid-cols-2 border-b border-neutral-200">
-        <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center">
-          <button onClick={onBack} className="mb-8 flex w-fit items-center gap-2 text-xs uppercase tracking-[0.18em] text-neutral-500">
+    <article className="article">
+      <section className="article-hero">
+        <div className="article-hero-copy">
+          <button onClick={onBack} className="back-button">
             <ArrowLeft size={14} /> Back to Journal
           </button>
-          <div className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-pink-500">{article.category}</div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light leading-[0.95] tracking-[-0.065em] text-neutral-950">{article.title}</h1>
-          <p className="mt-6 max-w-xl text-base md:text-lg leading-7 text-neutral-600">{article.subtitle}</p>
-          <div className="mt-7 flex flex-wrap gap-4 text-[11px] uppercase tracking-[0.14em] text-neutral-500">
-            <span className="flex items-center gap-2"><Clock size={14} /> {article.readTime}</span>
-            <span className="flex items-center gap-2"><Tag size={14} /> {article.featuredLens}</span>
+          <div className="category-label">{article.category}</div>
+          <h1>{article.title}</h1>
+          <p className="subtitle">{article.subtitle}</p>
+          <div className="meta">
+            <span><Clock size={14} /> {article.readTime}</span>
+            <span><Tag size={14} /> {article.featuredLens}</span>
           </div>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <button onClick={onLike} className={`flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-semibold ${liked ? "border-pink-500 bg-pink-500 text-white" : "border-neutral-200 bg-white text-neutral-800"}`}>
+          <div className="actions">
+            <button onClick={onLike} className={liked ? "liked" : ""}>
               <Heart size={16} fill={liked ? "currentColor" : "none"} /> {liked ? "Liked" : "Like"}
             </button>
-            <button onClick={copyLink} className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-5 py-3 text-sm font-semibold text-neutral-800">
+            <button onClick={copyLink}>
               <Copy size={16} /> {copied === "link" ? "Copied" : "Copy Link"}
             </button>
           </div>
         </div>
-        <div className="h-[320px] md:h-[460px] lg:h-auto min-h-[320px] bg-neutral-100">
-          <img src={article.image} alt={article.title} className="h-full w-full object-cover" />
+        <div className="article-image">
+          <img src={article.image} alt={article.title} />
         </div>
       </section>
 
-      <section className="grid gap-8 p-6 md:p-10 lg:grid-cols-[0.75fr_1.25fr] lg:p-12 border-b border-neutral-200">
-        <aside className="text-2xl md:text-3xl leading-tight tracking-[-0.04em] text-neutral-950">
+      <section className="article-body">
+        <aside className="pullquote">
           “The best lens should feel like you — only a little more awake, a little more defined.”
         </aside>
-        <div className="space-y-6">
+        <div className="body-content">
           {article.body.map(renderBlock)}
         </div>
       </section>
 
-      <section className="grid gap-5 p-6 md:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:p-12 border-b border-neutral-200">
+      <section className="share-panel">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-pink-500"><Share2 size={14} /> Share this story</div>
-          <p className="max-w-2xl text-sm md:text-base leading-7 text-neutral-600">Instagram sharing copies the article text and link so you can paste it into an Instagram Story.</p>
+          <div className="share-title"><Share2 size={14} /> Share this story</div>
+          <p>Instagram sharing copies the article text and link so you can paste it into an Instagram Story.</p>
         </div>
-        <div className="grid gap-3 sm:flex sm:flex-wrap lg:justify-end">
-          <a className="flex items-center justify-center gap-2 rounded-full border border-neutral-200 px-5 py-3 text-sm font-semibold" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a>
-          <a className="flex items-center justify-center rounded-full border border-neutral-200 px-5 py-3 text-sm font-semibold" href={`https://www.linkedin.com/shareArticle?mini=true&title=${encodeURIComponent(article.title)}`} target="_blank" rel="noreferrer">in LinkedIn</a>
-          <a className="flex items-center justify-center rounded-full border border-neutral-200 px-5 py-3 text-sm font-semibold" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noreferrer">𝕏 Share</a>
-          <button onClick={copyInstagram} className="flex items-center justify-center rounded-full border border-neutral-200 px-5 py-3 text-sm font-semibold">📸 {copied === "insta" ? "Copied" : "Instagram Story"}</button>
+        <div className="share-buttons">
+          <a href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a>
+          <a href={`https://www.linkedin.com/shareArticle?mini=true&title=${encodeURIComponent(article.title)}`} target="_blank" rel="noreferrer">in LinkedIn</a>
+          <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`} target="_blank" rel="noreferrer">𝕏 Share</a>
+          <button onClick={copyInstagram}>📸 {copied === "insta" ? "Copied" : "Instagram Story"}</button>
         </div>
       </section>
 
-      <section className="flex flex-col gap-5 bg-gradient-to-br from-pink-50 to-white p-6 md:p-10 lg:flex-row lg:items-center lg:justify-between lg:p-12">
+      <section className="featured-lens">
         <div>
-          <div className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-pink-500">Featured Lens</div>
-          <h2 className="text-3xl font-light tracking-[-0.04em]">{article.featuredLens}</h2>
-          <p className="mt-1 text-neutral-600">Designed to enhance, not overpower.</p>
+          <div className="category-label">Featured Lens</div>
+          <h2>{article.featuredLens}</h2>
+          <p>Designed to enhance, not overpower.</p>
         </div>
-        <a href="https://monvue.in/collections/all" target="_blank" rel="noreferrer" className="rounded-full bg-neutral-950 px-6 py-3 text-center text-sm font-semibold text-white">Explore Lens</a>
+        <a href="https://monvue.in/collections/all" target="_blank" rel="noreferrer">Explore Lens</a>
       </section>
     </article>
   );
 }
 
-export default function MonvueJournalContentApp() {
+export default function App() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(1);
@@ -275,9 +275,7 @@ export default function MonvueJournalContentApp() {
   }
 
   function copyInstagram() {
-    navigator.clipboard?.writeText(`${selectedArticle.title}
-
-Read on Monvue Journal: ${window.location.href}`);
+    navigator.clipboard?.writeText(`${selectedArticle.title}\n\nRead on Monvue Journal: ${window.location.href}`);
     markCopied("insta");
   }
 
@@ -292,35 +290,33 @@ Read on Monvue Journal: ${window.location.href}`);
   };
 
   return (
-    <div className="min-h-screen bg-white text-neutral-950">
-      <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <div className="flex items-center gap-3">
-            <div className="text-xl md:text-2xl font-medium tracking-[0.18em]">MONVUE</div>
-            <div className="rounded-full bg-pink-100 px-3 py-1 text-[10px] md:text-xs font-bold tracking-[0.12em] text-pink-600">JOURNAL</div>
-          </div>
-          <nav className="hidden gap-6 text-xs uppercase tracking-[0.14em] text-neutral-600 md:flex">
-            {categories.map((category) => (
-              <button key={category} onClick={() => setActiveCategory(category)} className={activeCategory === category ? "font-bold text-pink-500" : "hover:text-pink-500"}>
-                {category === "Culture & Trends" ? "Culture" : category === "Monvue Stories" ? "Stories" : category}
-              </button>
-            ))}
-          </nav>
+    <div className="site">
+      <header className="topbar">
+        <div className="brand">
+          <div className="logo">MONVUE</div>
+          <div className="journal-pill">JOURNAL</div>
         </div>
+        <nav className="desktop-nav">
+          {categories.map((category) => (
+            <button key={category} onClick={() => setActiveCategory(category)} className={activeCategory === category ? "active" : ""}>
+              {category === "Culture & Trends" ? "Culture" : category === "Monvue Stories" ? "Stories" : category}
+            </button>
+          ))}
+        </nav>
       </header>
 
-      <main className="hidden md:grid mx-auto max-w-7xl grid-cols-[340px_1fr] gap-6 p-6">
-        <aside className="sticky top-24 self-start rounded-[1.7rem] border border-neutral-200 bg-neutral-50 p-4 max-h-[calc(100vh-120px)] overflow-y-auto">
-          <div className="mb-4 flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-3">
-            <Search size={16} className="text-neutral-400" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search articles" className="w-full bg-transparent text-sm outline-none" />
+      <main className="desktop-shell">
+        <aside className="sidebar">
+          <div className="searchbox">
+            <Search size={16} />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search articles" />
           </div>
-          <div className="grid gap-3">
+          <div className="index-list">
             {filteredArticles.map((article) => (
-              <button key={article.id} onClick={() => chooseArticle(article.id)} className={`rounded-2xl border p-4 text-left transition ${selectedId === article.id ? "border-pink-200 bg-white shadow-sm" : "border-transparent hover:bg-white"}`}>
-                <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-pink-500">{article.category}</div>
-                <div className="font-semibold leading-snug">{article.title}</div>
-                <div className="mt-2 text-xs text-neutral-500">{article.readTime}</div>
+              <button key={article.id} onClick={() => chooseArticle(article.id)} className={selectedId === article.id ? "index-card active" : "index-card"}>
+                <span>{article.category}</span>
+                <strong>{article.title}</strong>
+                <small>{article.readTime}</small>
               </button>
             ))}
           </div>
@@ -328,24 +324,24 @@ Read on Monvue Journal: ${window.location.href}`);
         <ArticlePage {...articleProps} onBack={() => { setActiveCategory("All"); setQuery(""); }} />
       </main>
 
-      <main className="md:hidden p-4">
+      <main className="mobile-shell">
         {!mobileArticleOpen ? (
           <>
-            <section className="mb-5 overflow-hidden rounded-[1.7rem] border border-neutral-200 bg-white shadow-sm">
-              <div className="h-72 bg-neutral-100">
-                <img src={articles[0].image} alt={articles[0].title} className="h-full w-full object-cover" />
+            <section className="mobile-feature">
+              <div className="mobile-feature-image">
+                <img src={articles[0].image} alt={articles[0].title} />
               </div>
-              <div className="p-5">
-                <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-pink-500">Featured Story</div>
-                <h1 className="text-4xl font-light leading-[0.95] tracking-[-0.06em]">{articles[0].title}</h1>
-                <p className="mt-4 text-sm leading-6 text-neutral-600">{articles[0].subtitle}</p>
-                <button onClick={() => chooseArticle(articles[0].id, true)} className="mt-5 rounded-full bg-neutral-950 px-5 py-3 text-sm font-semibold text-white">Read Feature</button>
+              <div className="mobile-feature-copy">
+                <div className="category-label">Featured Story</div>
+                <h1>{articles[0].title}</h1>
+                <p>{articles[0].subtitle}</p>
+                <button onClick={() => chooseArticle(articles[0].id, true)}>Read Feature</button>
               </div>
             </section>
 
-            <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
+            <div className="mobile-tabs">
               {categories.map((category) => (
-                <button key={category} onClick={() => setActiveCategory(category)} className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold ${activeCategory === category ? "border-pink-200 bg-pink-50 text-pink-600" : "border-neutral-200 bg-white text-neutral-600"}`}>
+                <button key={category} onClick={() => setActiveCategory(category)} className={activeCategory === category ? "active" : ""}>
                   {category}
                 </button>
               ))}
@@ -354,18 +350,18 @@ Read on Monvue Journal: ${window.location.href}`);
             {groupedArticles.map((group) => {
               if (activeCategory !== "All" && activeCategory !== group.category) return null;
               return (
-                <section key={group.category} className="mb-8">
-                  <h2 className="mb-3 text-2xl font-light tracking-[-0.04em]">{group.category}</h2>
-                  <div className="grid gap-3">
+                <section key={group.category} className="mobile-section">
+                  <h2>{group.category}</h2>
+                  <div className="mobile-card-grid">
                     {group.articles.map((article) => (
-                      <button key={article.id} onClick={() => chooseArticle(article.id, true)} className="grid grid-cols-[105px_1fr] gap-3 rounded-3xl border border-neutral-200 bg-white p-3 text-left">
-                        <div className="h-32 overflow-hidden rounded-2xl bg-neutral-100">
-                          <img src={article.image} alt={article.title} className="h-full w-full object-cover" />
+                      <button key={article.id} onClick={() => chooseArticle(article.id, true)} className="mobile-card">
+                        <div className="mobile-card-image">
+                          <img src={article.image} alt={article.title} />
                         </div>
-                        <div className="py-1">
-                          <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.14em] text-pink-500">{article.readTime}</div>
-                          <h3 className="text-lg font-medium leading-tight tracking-[-0.04em]">{article.title}</h3>
-                          <p className="mt-2 line-clamp-3 text-xs leading-5 text-neutral-600">{article.subtitle}</p>
+                        <div className="mobile-card-copy">
+                          <span>{article.readTime}</span>
+                          <h3>{article.title}</h3>
+                          <p>{article.subtitle}</p>
                         </div>
                       </button>
                     ))}
